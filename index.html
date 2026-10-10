@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>音声ボタン</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f1f5f9;
+      text-align: center;
+      padding: 24px 12px;
+      color: #1e293b;
+    }
+    h1 { font-size: 26px; }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 500px;
+      margin: 28px auto;
+    }
+    .sound {
+      min-height: 110px;
+      border: none;
+      border-radius: 16px;
+      background: #2563eb;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px;
+    }
+    .stop {
+      background: #475569;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      font-size: 16px;
+    }
+    #status { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>MY SOUND BOARD</h1>
+  <p>ボタンを押して音声を再生</p>
+
+  <div class="buttons">
+    <button class="sound" onclick="playSound(1)">▶ セリフ 1</button>
+    <button class="sound" onclick="playSound(2)">▶ セリフ 2</button>
+    <button class="sound" onclick="playSound(3)">▶ セリフ 3</button>
+    <button class="sound" onclick="playSound(4)">▶ セリフ 4</button>
+    <button class="sound" onclick="playSound(5)">▶ セリフ 5</button>
+  </div>
+
+  <button class="stop" onclick="stopSound()">■ 停止</button>
+  <p id="status">音声を登録すると再生できます</p>
+
+  <script>
+    let currentAudio = null;
+
+    function playSound(number) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+
+      currentAudio = new Audio("audio/" + number + ".mp3");
+      document.getElementById("status").textContent =
+        "セリフ " + number + " を再生しています";
+
+      currentAudio.play().catch(() => {
+        document.getElementById("status").textContent =
+          "音声ファイルがまだないか、再生できません";
+      });
+    }
+
+    function stopSound() {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+      }
+      document.getElementById("status").textContent = "停止しました";
+    }
+  </script>
+</body>
+</html>
