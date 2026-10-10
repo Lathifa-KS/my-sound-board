@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -66,11 +65,23 @@
         currentAudio.currentTime = 0;
       }
 
-      currentAudio = new Audio("audio/" + number + ".m4a");
+      const audio = new Audio("audio/" + number + ".m4a");
+      audio.preload = "auto";
+      currentAudio = audio;
+
+      audio.addEventListener("ended", () => {
+        if (currentAudio === audio) {
+          currentAudio = null;
+        }
+      });
+
       document.getElementById("status").textContent =
         "セリフ " + number + " を再生しています";
 
-      currentAudio.play().catch(() => {
+      audio.play().catch(() => {
+        if (currentAudio === audio) {
+          currentAudio = null;
+        }
         document.getElementById("status").textContent =
           "音声ファイルがまだないか、再生できません";
       });
